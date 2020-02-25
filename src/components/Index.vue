@@ -74,7 +74,7 @@
                         </a-carousel>
                         <a-list itemLayout="vertical" size="large">
                             <a-list-item v-for="movie in movie_list" :key="movie.title">
-                                <img slot="extra" width="200" height="200" src="../assets/images/cab1.webp" />
+                                <img :src="movie.post" slot="extra" width="200" height="200" />
                                 <a-list-item-meta :description="item">
                                     <a slot="title" style="float:left; font-size: large;" href="#">{{ movie.title }}</a>
                                 </a-list-item-meta>
@@ -128,6 +128,7 @@
             return {
                 movie_list: '',
                 movie_types: '',
+                host: 'http://127.0.0.1:8000',
             };
         },
         mounted() {
@@ -136,21 +137,21 @@
         },
         methods: {
             getMovies() {
-                var url = "http://127.0.0.1:8000/movies/"
+                var url = this.host + "/movies"
                 axios.get(url)
                     .then(response => {
                         this.movie_list = response.data
                     })
             },
             getMovieTypes() {
-                var url = "http://127.0.0.1:8000/movies/types"
+                var url = this.host + "/movies/types"
                 axios.get(url)
                     .then(response => {
                         this.movie_types = response.data
                     })
             },
             getMovieByType(movie_type) {
-                var url = "http://127.0.0.1:8000/movies/query?movie_type=" + movie_type
+                var url = this.host + "/movies/query?movie_type=" + movie_type
                 axios.get(url)
                     .then(response => {
                         this.movie_list = response.data
@@ -160,7 +161,7 @@
                 var icon = document.getElementById("likeicon" + movie_id)
                 var elem = document.getElementById("like_count" + movie_id)
 
-                var url = "http://127.0.0.1:8000/movies/likeit"
+                var url = this.host + "/movies/likeit"
                 var headers = {
                     "Access-Control-Allow-Credentials": true,
                     "Access-Control-Allow-Origin": "*",
