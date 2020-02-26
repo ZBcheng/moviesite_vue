@@ -6,7 +6,6 @@ import 'ant-design-vue/dist/antd.css';
 
 
 import Index from './components/Index'
-import HelloWorld from './components/HelloWorld'
 
 Vue.config.productionTip = false
 
@@ -15,7 +14,6 @@ Vue.use(Antd, VueRouter)
 
 const routes = [
   { path: '/', component: Index },
-  { path: '/hello', component: HelloWorld }
 ]
 
 const router = new VueRouter({

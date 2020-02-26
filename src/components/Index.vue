@@ -127,7 +127,6 @@
         data() {
             return {
                 movie_list: '',
-                selected_type: '',
                 movie_types: '',
                 host: 'http://127.0.0.1:8000',
             };
