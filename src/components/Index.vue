@@ -4,8 +4,46 @@
             <header class="header"
                 style="width: 100%; background: white; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.1);">
                 <a-row>
+                    <div style="width: 20%;float: left;margin-left:12%;padding-top:1%;">
+                        <img src="../assets/images/brand.png" style="width: 55%;" /> </div>
+                    <div style="width: 30%; float: left; padding-top:1%; margin-left:1.5%">
+                        <template>
+                            <div class="certain-category-search-wrapper" style="width: 100%;">
+                                <a-auto-complete class="certain-category-search"
+                                    dropdownClassName="certain-category-search-dropdown"
+                                    :dropdownMatchSelectWidth="false" :dropdownStyle="{width: '300px'}" size="large"
+                                    style="width: 100%" placeholder="input here" optionLabelProp="value">
+                                    <template slot="dataSource">
+                                        <a-select-opt-group v-for="group in dataSource" :key="group.title">
+                                            <span slot="label">
+                                                TITLE
+                                                <a style="float: right" href="https://www.google.com/search?q=antd"
+                                                    target="_blank" rel="noopener noreferrer">更多
+                                                </a>
+                                            </span>
+                                            <a-select-option>
+                                                TITLE
+                                                <span class="certain-search-item-count"> 人 关注</span>
+                                            </a-select-option>
+                                        </a-select-opt-group>
+                                        <a-select-option disabled key="all" class="show-all">
+                                            <a href="https://www.google.com/search?q=antd" target="_blank"
+                                                rel="noopener noreferrer">
+                                                查看所有结果
+                                            </a>
+                                        </a-select-option>
+                                    </template>
+                                    <a-input>
+                                        <a-icon slot="suffix" type="search" class="certain-category-icon" />
+                                    </a-input>
+                                </a-auto-complete>
+                            </div>
+                        </template>
+
+                    </div>
                     <a-menu theme="light" mode="horizontal" :defaultSelectedKeys="['1']"
-                        style="line-height: 64px; width: 100%; text-align: right;">
+                        style="line-height: 63px; width: 20%; text-align: right; float: right; margin-right: 15%">
+                        <!-- <a>hello</a> -->
                         <a-menu-item>
                             <a-icon type="edit" />写影评
                         </a-menu-item>
@@ -19,9 +57,9 @@
                                 <a-icon type="edit" />我的影评</a-menu-item>
                         </a-sub-menu>
 
-                        <a-sub-menu>
+                        <a-sub-menu style="margin-right: 17%">
                             <span slot="title" class="submenu-title-wrapper">
-                                <a-icon type="smile" />我的</span>
+                                <a-avatar :size="44" :src="current_user.avatar" /></span>
                             <a-menu-item-group title="个人信息">
                                 <a-menu-item key="setting:1">
                                     <a-icon type="idcard" />我的主页</a-menu-item>
@@ -46,7 +84,7 @@
                     <a-col :span="4">
                         <a-menu
                             style="text-align: left; width: 80%; font-weight: bold; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.4);"
-                            :defaultSelectedKeys="['sub1']" mode="inline">
+                            :defaultSelectedKeys="['all']" mode="inline">
 
                             <a-menu-item-group>
                                 <template slot="title">
@@ -58,6 +96,8 @@
                             <a-menu-item-group>
                                 <template slot="title">
                                     <span style="color: #1890FF">分类</span></template>
+                                <a-menu-item key="all" @click="getMovies()">全部
+                                </a-menu-item>
                                 <a-menu-item v-for="category in categories" :key="category.id"
                                     @click="getMovieByType(category.name)">{{ category.name }}
                                 </a-menu-item>
@@ -65,7 +105,7 @@
                         </a-menu>
                     </a-col>
                     <a-col :span="12">
-                        <a-carousel autoplay>
+                        <a-carousel autoplay style="margin-bottom: 2%;">
                             <div>
                                 <img src="../assets/images/img1.jpg" style="width: 100%">
                             </div>
@@ -107,9 +147,9 @@
 
             </div>
 
-
             <a-layout-footer style="margin-top:5%; text-align: center; background: white;">
-                Ant Design ©2018 Created by Ant UED
+                <a href="https://github.com/zbcheng/moviesite">MOVIESITE ©2020 Created by
+                    ZBCheng</a>
             </a-layout-footer>
         </a-layout>
 
@@ -128,17 +168,26 @@
         name: 'Index',
         data() {
             return {
+                current_user: '',
                 movie_list: '',
                 categories: '',
                 host: 'http://127.0.0.1:8000',
             };
         },
         mounted() {
+            this.getCurrentUser()
             this.getMovies()
             this.getMovieTypes()
         },
         methods: {
+            getCurrentUser() {
+                var url = this.host + "/users?username=" + 'bee'
+                axios.get(url)
+                    .then(response => {
+                        this.current_user = response.data[0]
+                    })
 
+            },
             getMovies() {
                 var url = this.host + "/movies"
                 axios.get(url)
