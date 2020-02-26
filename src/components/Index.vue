@@ -74,7 +74,7 @@
                         </a-carousel>
                         <a-list itemLayout="vertical" size="large">
                             <a-list-item v-for="movie in movie_list" :key="movie.title">
-                                <img :src="movie.post" slot="extra" width="200" height="200" />
+                                <img :src="movie.post" slot="extra" width="150" height="200" />
                                 <a-list-item-meta :description="item">
                                     <a slot="title" style="float:left; font-size: large;" href="#">{{ movie.title }}</a>
                                 </a-list-item-meta>
