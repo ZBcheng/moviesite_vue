@@ -1,7 +1,8 @@
 <template>
     <div class="index">
         <a-layout id="components-layout">
-            <header class="header" style="width: 100%; background: white;">
+            <header class="header"
+                style="width: 100%; background: white; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.1);">
                 <a-row>
                     <a-menu theme="light" mode="horizontal" :defaultSelectedKeys="['1']"
                         style="line-height: 64px; width: 100%; text-align: right;">
@@ -43,8 +44,9 @@
                 <a-row>
                     <a-col :span="4"></a-col>
                     <a-col :span="4">
-                        <a-menu style="text-align: left; width: 80%; font-weight: bold;" :defaultSelectedKeys="['sub1']"
-                            mode="inline">
+                        <a-menu
+                            style="text-align: left; width: 80%; font-weight: bold; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.4);"
+                            :defaultSelectedKeys="['sub1']" mode="inline">
 
                             <a-menu-item-group>
                                 <template slot="title">
@@ -56,8 +58,8 @@
                             <a-menu-item-group>
                                 <template slot="title">
                                     <span style="color: #1890FF">分类</span></template>
-                                <a-menu-item v-for="type in movie_types" :key="type.id"
-                                    @click="getMovieByType(type.type_name)">{{ type.type_name }}
+                                <a-menu-item v-for="category in categories" :key="category.id"
+                                    @click="getMovieByType(category.name)">{{ category.name }}
                                 </a-menu-item>
                             </a-menu-item-group>
                         </a-menu>
@@ -76,7 +78,7 @@
                             <a-list-item v-for="movie in movie_list" :key="movie.title">
                                 <img :src="movie.post" slot="extra" width="150" height="200" />
                                 <a-list-item-meta :description="item">
-                                    <a slot="title" style="float:left; font-size: large;" href="#">{{ movie.title }}</a>
+                                    <a slot="title" style="float:left; font-size: large;" href="#">{{ movie.name }}</a>
                                 </a-list-item-meta>
                                 <p style="float:left; overflow: hidden;
                                 display: -webkit-box; -webkit-line-clamp: 5;
@@ -127,7 +129,7 @@
         data() {
             return {
                 movie_list: '',
-                movie_types: '',
+                categories: '',
                 host: 'http://127.0.0.1:8000',
             };
         },
@@ -145,14 +147,14 @@
                     })
             },
             getMovieTypes() {
-                var url = this.host + "/movies/types"
+                var url = this.host + "/movies/categories"
                 axios.get(url)
                     .then(response => {
-                        this.movie_types = response.data
+                        this.categories = response.data
                     })
             },
-            getMovieByType(movie_type) {
-                var url = this.host + "/movies/query?movie_type=" + movie_type
+            getMovieByType(category) {
+                var url = this.host + "/movies/query?category=" + category
                 axios.get(url)
                     .then(response => {
                         this.movie_list = response.data
