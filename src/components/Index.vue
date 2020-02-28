@@ -88,20 +88,23 @@
 
                             <a-menu-item-group>
                                 <template slot="title">
-                                    <span style="color: #1890FF">
-                                        关注</span></template>
+                                    <span style="color: #1890FF">关注</span>
+                                </template>
                                 <a-menu-item key="sub1">关注1</a-menu-item>
                                 <a-menu-item key="sub2">关注2</a-menu-item>
                             </a-menu-item-group>
+
                             <a-menu-item-group>
                                 <template slot="title">
-                                    <span style="color: #1890FF">分类</span></template>
+                                    <span style="color: #1890FF">分类</span>
+                                </template>
                                 <a-menu-item key="all" @click="getMovies()">全部
                                 </a-menu-item>
                                 <a-menu-item v-for="category in categories" :key="category.id"
                                     @click="getMovieByType(category.name)">{{ category.name }}
                                 </a-menu-item>
                             </a-menu-item-group>
+
                         </a-menu>
                     </a-col>
                     <a-col :span="12">
@@ -152,7 +155,6 @@
                     ZBCheng</a>
             </a-layout-footer>
         </a-layout>
-
     </div>
 </template>
 

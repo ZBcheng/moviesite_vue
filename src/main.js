@@ -6,14 +6,17 @@ import 'ant-design-vue/dist/antd.css';
 
 
 import Index from './components/Index'
+import Login from './components/Login'
 
-Vue.config.productionTip = false
+// Vue.config.productionTip = false
 
-Vue.use(Antd, VueRouter)
+Vue.use(VueRouter)
+Vue.use(Antd)
 // Vue.use(VueRouter)
 
 const routes = [
   { path: '/', component: Index },
+  { path: '/login', component: Login }
 ]
 
 const router = new VueRouter({
@@ -23,6 +26,5 @@ const router = new VueRouter({
 
 new Vue({
   router,
-  components: { Antd },
   render: h => h(App)
 }).$mount('#app')
