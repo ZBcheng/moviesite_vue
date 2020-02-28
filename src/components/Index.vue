@@ -4,9 +4,9 @@
             <header class="header"
                 style="width: 100%; background: white; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.1);">
                 <a-row>
-                    <div style="width: 20%;float: left;margin-left:12%;padding-top:1%;">
-                        <img src="../assets/images/brand.png" style="width: 55%;" /> </div>
-                    <div style="width: 30%; float: left; padding-top:1%; margin-left:1.5%">
+                    <div style="width: 20%;float: left;margin-left:13%;padding-top:1%;">
+                        <img src="../assets/images/brand.svg" style="width: 60%;" /> </div>
+                    <div style="width: 30%; float: left; padding-top:1%; margin-left:0.5%">
                         <template>
                             <div class="certain-category-search-wrapper" style="width: 100%;">
                                 <a-auto-complete class="certain-category-search"
