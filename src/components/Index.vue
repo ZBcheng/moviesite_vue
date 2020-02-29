@@ -69,6 +69,8 @@
                                     <a-icon type="mail" />我的信息</a-menu-item>
                             </a-menu-item-group>
                             <a-menu-item-group title="其它">
+                                <a-menu-item key="login" @click="login">
+                                    <a-icon type="export" />登录</a-menu-item>
                                 <a-menu-item key="setting:4" style="color: red;">
                                     <a-icon type="export" />退出</a-menu-item>
                             </a-menu-item-group>
@@ -182,6 +184,9 @@
             this.getMovieTypes()
         },
         methods: {
+            login() {
+                this.$router.push("login")
+            },
             getCurrentUser() {
                 var url = this.host + "/users?username=" + 'bee'
                 axios.get(url)
