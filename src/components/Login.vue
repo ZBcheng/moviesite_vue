@@ -1,6 +1,6 @@
 <template>
     <div id="login"
-        :style="{'height': '100%', 'backgroundColor': '#B5E5FA', 'backgroundImage': 'url(' + require('../assets/background.png') + ')'}">
+        :style="{'height': '100%', 'backgroundColor': '#B5E5FA', 'backgroundImage': 'url(' + require('../assets/valley.png') + ')', 'backgroundSize': '100% 100%'}">
         <a-col :span="24">
             <div style="width: 30%; margin-left: 35%; margin-top: 10%;">
                 <a-card size=" large" :bordered="true" style="box-shadow: 30px 30px 30px rgba(12, 12, 12, 0.1);">
