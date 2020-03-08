@@ -203,7 +203,7 @@
                     })
             },
             getMovieTypes() {
-                var url = this.host + "/movies/categories"
+                var url = this.host + "/movies/mv_categories"
                 axios.get(url)
                     .then(response => {
                         this.categories = response.data
