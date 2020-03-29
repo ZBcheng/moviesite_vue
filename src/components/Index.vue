@@ -61,7 +61,7 @@
                             <span slot="title" class="submenu-title-wrapper">
                                 <a-avatar :size="44" :src="current_user.avatar" /></span>
                             <a-menu-item-group title="个人信息">
-                                <a-menu-item key="setting:1">
+                                <a-menu-item key="setting:1" @click="viewUser">
                                     <a-icon type="idcard" />我的主页</a-menu-item>
                                 <a-menu-item key="setting:2">
                                     <a-icon type="edit" />我的影评</a-menu-item>
@@ -150,6 +150,70 @@
                     </a-col>
                 </a-row>
 
+                <!-- 用户信息drawer -->
+                <a-drawer width="40%" placement="right" :closable="true" @close="onUserClose"
+                    :visible="userDrawerVisible">
+
+                    <a-row style="margin-top:4%">
+                        <a-col :span=5>
+                            <a-upload name="avatar" listType="picture-card" class="avatar-uploader"
+                                :showUploadList="false" action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                                :beforeUpload="beforeUpload" @change="handleChange">
+                                <img v-if="imageUrl" :src="imageUrl" alt="avatar" style="height: 90px; width: 90px" />
+                                <div v-else>
+                                    <a-icon :type="loading ? 'loading' : 'plus'" />
+                                    <div class="ant-upload-text">Upload</div>
+                                </div>
+                            </a-upload>
+                        </a-col>
+                        <a-col :span=12>
+                            <p
+                                style="margin-top:5%; margin-left: 15%; float: left; font-size: 40px; font-weight: bold;">
+                                {{ current_user.username }}</p>
+                        </a-col>
+                    </a-row>
+                    <a-divider />
+
+                    <a-form :form="updateUserForm" layout="vertical" @submit="updateUser">
+                        <a-row>
+                            <a-col :span="24">
+                                <a-row>
+                                    <a-col :span="3"><b :style="pStyle">手机</b></a-col>
+                                    <a-col :span="12">
+                                        <a-form-item>
+                                            <a-input v-decorator="['update_phone', {initialValue: current_user.phone}]">
+                                            </a-input>
+                                        </a-form-item>
+                                    </a-col>
+                                </a-row>
+                            </a-col>
+                        </a-row>
+                        <a-row style="margin-top:5%">
+                            <a-col :span="24">
+                                <a-row>
+                                    <a-col :span="3"><b :style="pStyle">邮件</b></a-col>
+                                    <a-col :span="12">
+                                        <a-form-item>
+                                            <a-input v-decorator="['update_email', {initialValue: current_user.email}]">
+                                            </a-input>
+                                        </a-form-item>
+                                    </a-col>
+                                </a-row>
+                            </a-col>
+                        </a-row>
+                        <a-divider />
+                        <a-row style="margin-top: 5%">
+                            <a-button type="primary" html-type="submit">变更</a-button>
+                        </a-row>
+                        <a-row style="margin-top: 55%; margin-bottom: 2%">
+                            <a-button type="danger" @click="logout"
+                                style="background-color:orangered; color: white; width: 100%">
+                                退出登录
+                            </a-button>
+                        </a-row>
+                    </a-form>
+                </a-drawer>
+
             </div>
 
             <a-layout-footer style="margin-top:5%; text-align: center; background: white;">
@@ -168,6 +232,12 @@
 <script>
     import axios from 'axios'
 
+    function getBase64(img, callback) {
+        const reader = new FileReader();
+        reader.addEventListener('load', () => callback(reader.result));
+        reader.readAsDataURL(img);
+    }
+
     export default {
         name: 'Index',
         data() {
@@ -175,6 +245,10 @@
                 current_user: '',
                 movie_list: '',
                 categories: '',
+                userDrawerVisible: false, // 用户信息drawer展示
+                updateUserForm: this.$form.createForm(this, { name: 'coordinated' }),
+                imageAvatar: '',
+                imageUrl: '',
                 host: 'http://127.0.0.1:8000',
             };
         },
@@ -184,14 +258,14 @@
             this.getMovieTypes()
         },
         methods: {
-            login() {
-                this.$router.push("login")
-            },
+
             getCurrentUser() {
-                var url = this.host + "/users?username=" + 'bee'
+                var url = this.host + "/users?username=" + sessionStorage.username
                 axios.get(url)
                     .then(response => {
                         this.current_user = response.data[0]
+                        this.imageUrl = this.current_user.avatar
+                        console.log(this.current_user)
                     })
 
             },
@@ -215,6 +289,70 @@
                     .then(response => {
                         this.movie_list = response.data
                     })
+            },
+
+            viewUser() {
+                this.userDrawerVisible = true
+            },
+            updateUser(e) {
+                e.preventDefault();
+                this.updateUserForm.validateFields((err, values) => {
+                    if (!err) {
+                        console.log(values)
+                        var phone = values.update_phone
+                        var email = values.update_email
+                        var avatar_name = this.imageAvatar
+                        var avatar_url = this.imageUrl
+
+                        var url = this.host + "/users/update"
+                        axios.put(url, {
+                            headers: {
+                                "Access-Control-Allow-Credentials": true,
+                                "Access-Control-Allow-Origin": "*",
+                                "Access-Control-Allow-Methods": "POST",
+                                "Access-Control-Allow-Headers": "Content-Type",
+                            },
+                            data: {
+                                "username": sessionStorage.username,
+                                "phone": phone,
+                                "email": email,
+                                "avatar_name": avatar_name,
+                                "avatar_url": avatar_url
+                            }
+                        })
+                            .then(response => {
+                                console.log(response.data)
+                                this.userDrawerVisible = false
+                                window.location.replace('/home')
+                            })
+                    }
+                })
+            },
+            handleChange(info) {
+                if (info.file.status === 'uploading') {
+                    this.loading = true;
+                    return;
+                }
+                if (info.file.status === 'done') {
+                    // Get this url from response in real world.
+                    getBase64(info.file.originFileObj, imageUrl => {
+                        this.imageUrl = imageUrl
+                        this.imageAvatar = info.file.originFileObj.name
+                        console.log(this.imageUrl)
+                        this.loading = false;
+                    });
+                }
+            },
+            beforeUpload(file) {
+                const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+                if (!isJpgOrPng) {
+                    this.$message.error('You can only upload JPG file!');
+                }
+                const isLt2M = file.size / 1024 / 1024 < 2;
+                if (!isLt2M) {
+                    this.$message.error('Image must smaller than 2MB!');
+                }
+                return isJpgOrPng && isLt2M;
             },
             likeit(movie_id) {
                 var icon = document.getElementById("likeicon" + movie_id)
@@ -267,6 +405,10 @@
 
 
             },
+
+            onUserClose() {
+                this.userDrawerVisible = false
+            }
         },
     };
 </script>

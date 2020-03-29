@@ -15,8 +15,8 @@ Vue.use(Antd)
 // Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Index },
-  { path: '/login', component: Login }
+  { path: '/', component: Login },
+  { path: '/home', component: Index }
 ]
 
 const router = new VueRouter({
