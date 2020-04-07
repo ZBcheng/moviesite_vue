@@ -4,6 +4,7 @@
       <Index />
       <Login />
       <Register />
+      <Upload />
     </router-view>
   </div>
 </template>
@@ -12,6 +13,7 @@
   import Index from './components/Index.vue'
   import Login from './components/Login.vue'
   import Register from './components/Register.vue'
+  import Upload from './components/Upload.vue'
 
   export default {
     name: 'App',
@@ -19,6 +21,7 @@
       Index,
       Login,
       Register,
+      Upload,
     }
   }
 </script>

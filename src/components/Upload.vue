@@ -63,7 +63,7 @@
                 }, 100)
             },
             submitFile() {
-                var url = this.host + "/file/upload"
+                var url = this.host + "/file/mpupload"
                 axios.post(url, this.formData)
                     .then(response => {
                         console.log(response)

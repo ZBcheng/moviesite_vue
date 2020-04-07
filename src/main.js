@@ -8,6 +8,7 @@ import 'ant-design-vue/dist/antd.css';
 import Index from './components/Index'
 import Login from './components/Login'
 import Register from './components/Register'
+import Upload from './components/Upload'
 
 // Vue.config.productionTip = false
 
@@ -19,6 +20,7 @@ const routes = [
   { path: '/', component: Login },
   { path: '/home', component: Index },
   { path: '/register', component: Register },
+  { path: '/upload', component: Upload },
 ]
 
 const router = new VueRouter({
