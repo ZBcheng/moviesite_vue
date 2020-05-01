@@ -123,7 +123,8 @@
                             <a-list-item v-for="movie in movie_list" :key="movie.title">
                                 <img :src="movie.post" slot="extra" width="150" height="200" />
                                 <a-list-item-meta :description="item">
-                                    <a slot="title" style="float:left; font-size: large;" href="#">{{ movie.name }}</a>
+                                    <a slot="title" style="float:left; font-size: large;"
+                                        @click="viewMovie(movie)">{{ movie.name }}</a>
                                 </a-list-item-meta>
                                 <p style="float:left; overflow: hidden;
                                 display: -webkit-box; -webkit-line-clamp: 5;
@@ -289,6 +290,9 @@
                     .then(response => {
                         this.movie_list = response.data
                     })
+            },
+            viewMovie(movie) {
+                this.$router.push({ path: "/view", query: { movie: movie } })
             },
 
             viewUser() {

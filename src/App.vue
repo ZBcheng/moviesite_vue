@@ -5,6 +5,7 @@
       <Login />
       <Register />
       <Upload />
+      <Detail />
     </router-view>
   </div>
 </template>
@@ -14,6 +15,7 @@
   import Login from './components/Login.vue'
   import Register from './components/Register.vue'
   import Upload from './components/Upload.vue'
+  import Detail from './components/Detail.vue'
 
   export default {
     name: 'App',
@@ -22,6 +24,7 @@
       Login,
       Register,
       Upload,
+      Detail,
     }
   }
 </script>

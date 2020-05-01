@@ -9,6 +9,7 @@ import Index from './components/Index'
 import Login from './components/Login'
 import Register from './components/Register'
 import Upload from './components/Upload'
+import Detail from './components/Detail'
 
 // Vue.config.productionTip = false
 
@@ -21,6 +22,7 @@ const routes = [
   { path: '/home', component: Index },
   { path: '/register', component: Register },
   { path: '/upload', component: Upload },
+  { path: '/view', component: Detail },
 ]
 
 const router = new VueRouter({
