@@ -105,7 +105,7 @@
                                 }
                                 sessionStorage.token = response.data.token;
                                 sessionStorage.username = response.data.data.username;
-                                // location.replace("http://127.0.0.1:8080/index")
+
                                 this.$router.push({ "path": '/home' })
                             })
                             .catch(response => {

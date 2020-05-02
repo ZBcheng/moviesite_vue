@@ -1,25 +1,118 @@
 <template>
+    <div id="detail" style="background:#ECECEC; height: 100%">
+        <header class="header" style="width: 100%; background: white; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.1);">
+            <a-row>
+                <div style="width: 20%;float: left;margin-left:13%;padding-top:1%;" @click="back2Index">
+                    <img src="../assets/images/brand.svg" style="width: 60%;" /> </div>
+                <a-menu theme="light" mode="horizontal" :defaultSelectedKeys="['1']"
+                    style="line-height: 63px; width: 20%; text-align: right; float: right; margin-right: 15%">
+                    <!-- <a>hello</a> -->
 
-    <div id="detail">
+                    <a-sub-menu style="margin-right: 17%">
+                        <span slot="title" class="submenu-title-wrapper">
+                            <a-avatar :size="44" :src="current_user.avatar" /></span>
+                        <a-menu-item-group title="个人信息">
+                            <a-menu-item key="info">
+                                <a-icon type="idcard" />我的信息</a-menu-item>
 
-        <div>
-            {{ movie.name }}
+                        </a-menu-item-group>
+                        <a-menu-item-group title="其它">
+                            <a-menu-item key="setting:4" style="color: red;">
+                                <a-icon type="export" />退出</a-menu-item>
+                        </a-menu-item-group>
+                    </a-sub-menu>
+                </a-menu>
+            </a-row>
+
+        </header>
+
+        <div style="height: 80%;">
+            <a-card hoverable style="width: 70%; height: 100%; margin-left: 15%; margin-top: 3%; text-align: left;">
+                <a-row>
+                    <a-col :span="8">
+                        <div style="float:left">
+                            <img slot="cover" alt="example" :src="movie.post" />
+                        </div>
+                    </a-col>
+                    <a-col :span="16" style="float: left; text-align: left;">
+                        <h1>{{ movie.name }}</h1>
+                        <h4>导演: {{ this.directors }}</h4>
+                        <h4>演员: {{ this.actors }}</h4>
+                        <h4>分类: {{ this.categories }}</h4>
+                        <h4>地区: {{ movie.area }}</h4>
+                        <h4>语言: {{ movie.language }}</h4>
+                        <h4>片长: {{ movie.length }} 分钟</h4>
+                        <h4>上映时间: {{ movie.release_date }}</h4>
+                        <a-button type="primary" icon="caret-right" :size="large" style="margin-top: 5%">
+                            播放
+                        </a-button>
+                    </a-col>
+                </a-row>
+                <a-row style="margin-top: 5%">
+                    <p style="font-size:16px; line-height: 1.8;">
+                        {{ movie.desc }}
+                    </p>
+                </a-row>
+            </a-card>
         </div>
     </div>
-
 </template>
 
 
 <script>
+    import axios from 'axios'
 
     export default {
         data() {
             return {
                 movie: this.$route.query.movie,
-                host: "http://127.0.0.1:8000/"
+                current_user: "",
+                directors: "",
+                actors: "",
+                categories: "",
+                host: "http://127.0.0.1:8000"
             }
         },
 
+        mounted() {
+            console.log(this.movie)
+            this.createDirectorsStr()
+            this.createActorsStr()
+            this.createCategoriesStr()
+            this.getUser()
+        },
+
+        methods: {
+            createDirectorsStr() {
+                var i
+                for (i = 0; i < this.$route.query.movie.directors.length; i++) {
+                    this.directors += this.$route.query.movie.directors[i] + " "
+                }
+            },
+            createActorsStr() {
+                var i
+                for (i = 0; i < this.$route.query.movie.actors.length; i++) {
+                    this.actors += this.$route.query.movie.actors[i] + " "
+                }
+            },
+            createCategoriesStr() {
+                var i
+                for (i = 0; i < this.$route.query.movie.category.length; i++) {
+                    this.categories += this.$route.query.movie.category[i] + " "
+                }
+            },
+            getUser() {
+                var url = this.host + "/users?username=" + sessionStorage.username
+                axios.get(url)
+                    .then(response => {
+                        this.current_user = response.data[0]
+                    })
+
+            },
+            back2Index() {
+                this.$router.push('/home')
+            }
+        }
 
     }
 </script>

@@ -44,33 +44,18 @@
                     <a-menu theme="light" mode="horizontal" :defaultSelectedKeys="['1']"
                         style="line-height: 63px; width: 20%; text-align: right; float: right; margin-right: 15%">
                         <!-- <a>hello</a> -->
-                        <a-menu-item>
-                            <a-icon type="edit" />写影评
-                        </a-menu-item>
-
-                        <a-sub-menu>
-                            <span slot="title" class="submenu-title-wrapper">
-                                <a-icon type="bell" />信息</span>
-                            <a-menu-item key="setting:1">
-                                <a-icon type="idcard" />我的主页</a-menu-item>
-                            <a-menu-item key="setting:2">
-                                <a-icon type="edit" />我的影评</a-menu-item>
-                        </a-sub-menu>
 
                         <a-sub-menu style="margin-right: 17%">
                             <span slot="title" class="submenu-title-wrapper">
                                 <a-avatar :size="44" :src="current_user.avatar" /></span>
                             <a-menu-item-group title="个人信息">
-                                <a-menu-item key="setting:1" @click="viewUser">
-                                    <a-icon type="idcard" />我的主页</a-menu-item>
-                                <a-menu-item key="setting:2">
-                                    <a-icon type="edit" />我的影评</a-menu-item>
-                                <a-menu-item key="setting:3">
-                                    <a-icon type="mail" />我的信息</a-menu-item>
+                                <a-menu-item key="info" @click="viewUser">
+                                    <a-icon type="idcard" />我的信息</a-menu-item>
+                                <a-menu-item key="mail" @click="viewMail">
+                                    <a-icon type="mail" />邮件箱</a-menu-item>
+
                             </a-menu-item-group>
                             <a-menu-item-group title="其它">
-                                <a-menu-item key="login" @click="login">
-                                    <a-icon type="export" />登录</a-menu-item>
                                 <a-menu-item key="setting:4" style="color: red;">
                                     <a-icon type="export" />退出</a-menu-item>
                             </a-menu-item-group>
@@ -138,11 +123,7 @@
                                                 @click="likeit(movie.id)" />
                                             <span :id="'like_count' + movie.id">{{ movie.like_count }}</span>
                                         </span>
-                                        <span style="margin-left: 16px;">
-                                            <a-icon type="message" style="margin-right: 4px; margin-top: 10%"
-                                                @click="likeit()" />
-                                            {{ movie.comment_count }}
-                                        </span>
+
                                     </a-row>
 
                                 </template>
@@ -294,7 +275,9 @@
             viewMovie(movie) {
                 this.$router.push({ path: "/view", query: { movie: movie } })
             },
-
+            viewMail() {
+                this.$router.push("/message")
+            },
             viewUser() {
                 this.userDrawerVisible = true
             },
