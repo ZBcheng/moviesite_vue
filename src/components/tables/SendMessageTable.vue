@@ -4,7 +4,7 @@
             <a-form :form="messageForm" @submit="sendMessage">
                 <a-row>
                     <a-form-item>
-                        <a-col :span="11">
+                        <a-col :span="24">
                             <p style="float:left; font-size: 16px">收件人</p>
                             <a-select v-decorator="['receiver', {rules: [{ required: true, message: '请选择收件人' }]}]"
                                 mode="multiple" style="width: 100%" placeholder="receiver">
@@ -20,14 +20,14 @@
                                 </a-select-option>
                             </a-select>
                         </a-col>
-                        <a-col :span="11" style="float:right">
+                        <!-- <a-col :span="11" style="float:right">
                             <p style="float:left; font-size: 16px">关联漏洞</p>
                             <a-select v-decorator="['linked_cve']" mode="multiple" style="width: 100%"
                                 placeholder="linked cve">
                                 <a-select-option v-for="vuln in vulnList" :key="vuln.cve_id">{{ vuln.cve_id }}
                                 </a-select-option>
                             </a-select>
-                        </a-col>
+                        </a-col> -->
 
                     </a-form-item>
 
@@ -59,6 +59,7 @@
                 <a-col :span="24" style="margin-bottom: 2%;">
                     <h3 style="color: gray">{{ message_content }}</h3>
                 </a-col>
+
                 <a-col :span="24">
                     <a-button type="primary" @click="viewForm">确定</a-button>
                 </a-col>

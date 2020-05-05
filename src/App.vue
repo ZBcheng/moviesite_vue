@@ -7,6 +7,7 @@
       <Upload />
       <Detail />
       <Message />
+      <Movie />
     </router-view>
   </div>
 </template>
@@ -17,7 +18,7 @@
   import Register from './components/Register.vue'
   import Upload from './components/Upload.vue'
   import Detail from './components/Detail.vue'
-  import Message from './components/Message.vue'
+  import Movie from './components/Movie.vue'
 
   export default {
     name: 'App',
@@ -27,7 +28,7 @@
       Register,
       Upload,
       Detail,
-      Message,
+      Movie,
     }
   }
 </script>

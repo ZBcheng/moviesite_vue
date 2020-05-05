@@ -10,7 +10,7 @@ import Login from './components/Login'
 import Register from './components/Register'
 import Upload from './components/Upload'
 import Detail from './components/Detail'
-import Message from './components/Message'
+import Movie from './components/Movie'
 
 // Vue.config.productionTip = false
 
@@ -24,7 +24,7 @@ const routes = [
   { path: '/register', component: Register },
   { path: '/upload', component: Upload },
   { path: '/view', component: Detail },
-  { path: '/message', component: Message },
+  { path: '/movie', component: Movie }
 ]
 
 const router = new VueRouter({

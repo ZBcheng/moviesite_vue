@@ -12,30 +12,11 @@
                                 <a-auto-complete class="certain-category-search"
                                     dropdownClassName="certain-category-search-dropdown"
                                     :dropdownMatchSelectWidth="false" :dropdownStyle="{width: '300px'}" size="large"
-                                    style="width: 100%" placeholder="input here" optionLabelProp="value">
-                                    <template slot="dataSource">
-                                        <a-select-opt-group v-for="group in dataSource" :key="group.title">
-                                            <span slot="label">
-                                                TITLE
-                                                <a style="float: right" href="https://www.google.com/search?q=antd"
-                                                    target="_blank" rel="noopener noreferrer">更多
-                                                </a>
-                                            </span>
-                                            <a-select-option>
-                                                TITLE
-                                                <span class="certain-search-item-count"> 人 关注</span>
-                                            </a-select-option>
-                                        </a-select-opt-group>
-                                        <a-select-option disabled key="all" class="show-all">
-                                            <a href="https://www.google.com/search?q=antd" target="_blank"
-                                                rel="noopener noreferrer">
-                                                查看所有结果
-                                            </a>
-                                        </a-select-option>
-                                    </template>
-                                    <a-input>
-                                        <a-icon slot="suffix" type="search" class="certain-category-icon" />
-                                    </a-input>
+                                    style="width: 100%" placeholder="请输入电影名" optionLabelProp="value">
+
+                                    <a-input-search id="movie-searcher" placeholder="input search text"
+                                        style="width: 100%; float: left" @search="onSearch" />
+
                                 </a-auto-complete>
                             </div>
                         </template>
@@ -51,8 +32,7 @@
                             <a-menu-item-group title="个人信息">
                                 <a-menu-item key="info" @click="viewUser">
                                     <a-icon type="idcard" />我的信息</a-menu-item>
-                                <a-menu-item key="mail" @click="viewMail">
-                                    <a-icon type="mail" />邮件箱</a-menu-item>
+
 
                             </a-menu-item-group>
                             <a-menu-item-group title="其它">
@@ -64,6 +44,19 @@
                 </a-row>
 
             </header>
+
+            <a-row style="margin-top: 2%;">
+                <a-col :span="4"></a-col>
+                <a-col :span="16">
+                    <a-carousel autoplay>
+                        <div v-for=" comp in compilation_list" :key="comp.name">
+                            <img :src="comp.post" style="width: 100%; max-height: 400px;" @click="alert('hello')">
+                        </div>
+                    </a-carousel>
+                </a-col>
+                <a-col :span="4"></a-col>
+
+            </a-row>
 
             <div style="margin-top: 3%; margin-bottom: 20%;">
                 <a-row>
@@ -77,59 +70,79 @@
                                 <template slot="title">
                                     <span style="color: #1890FF">关注</span>
                                 </template>
-                                <a-menu-item key="sub1">关注1</a-menu-item>
-                                <a-menu-item key="sub2">关注2</a-menu-item>
+                                <a-menu-item key="movies" @click="selectTag('movies')">电影</a-menu-item>
+                                <a-menu-item key="messages" @click="selectTag('messages')">信箱</a-menu-item>
                             </a-menu-item-group>
 
-                            <a-menu-item-group>
+                            <a-menu-item-group v-if="selectedTag=='movies'">
                                 <template slot="title">
                                     <span style="color: #1890FF">分类</span>
                                 </template>
                                 <a-menu-item key="all" @click="getMovies()">全部
                                 </a-menu-item>
                                 <a-menu-item v-for="category in categories" :key="category.id"
-                                    @click="getMovieByType(category.name)">{{ category.name }}
+                                    @click="getMovieByType(category.name)">
+                                    {{ category.name }}
                                 </a-menu-item>
                             </a-menu-item-group>
 
+
                         </a-menu>
                     </a-col>
-                    <a-col :span="12">
-                        <a-carousel autoplay style="margin-bottom: 2%;">
-                            <div>
-                                <img src="../assets/images/img1.jpg" style="width: 100%">
-                            </div>
-                            <div>
-                                <img src="../assets/images/img2.jpg" style="width: 100%">
-                            </div>
 
-                        </a-carousel>
-                        <a-list itemLayout="vertical" size="large">
-                            <a-list-item v-for="movie in movie_list" :key="movie.title">
-                                <img :src="movie.post" slot="extra" width="150" height="200" />
-                                <a-list-item-meta :description="item">
-                                    <a slot="title" style="float:left; font-size: large;"
-                                        @click="viewMovie(movie)">{{ movie.name }}</a>
-                                </a-list-item-meta>
-                                <p style="float:left; overflow: hidden;
+                    <div v-if="selectedTag=='movies'">
+                        <a-col :span="12">
+
+                            <a-list itemLayout="vertical" size="large">
+                                <a-list-item v-for="movie in movie_list" :key="movie.title">
+                                    <img :src="movie.post" slot="extra" width="150" height="200" />
+                                    <a-list-item-meta :description="item">
+                                        <a slot="title" style="float:left; font-size: large;"
+                                            @click="viewMovie(movie)">{{ movie.name }}</a>
+                                    </a-list-item-meta>
+                                    <p style="float:left; overflow: hidden;
                                 display: -webkit-box; -webkit-line-clamp: 5;
                                 -webkit-box-orient: vertical;">{{ movie.desc }}</p>
-                                <a-rate disabled :defaultValue="movie.score" style="float:left; " />
-                                <template>
-                                    <a-row style="float: right; font-size: 16px">
-                                        <span>
-                                            <a-icon :id="'likeicon' + movie.id" type="like"
-                                                :style="{color: 'black', marginRight: '4px', marginTop: '10%', theme: 'twoTone'}"
-                                                @click="likeit(movie.id)" />
-                                            <span :id="'like_count' + movie.id">{{ movie.like_count }}</span>
-                                        </span>
+                                    <a-rate disabled :defaultValue="movie.score" style="float:left; " />
+                                    <template>
+                                        <a-row style="float: right; font-size: 16px">
+                                            <span>
+                                                <a-icon :id="'likeicon' + movie.id" type="like"
+                                                    :style="{color: 'black', marginRight: '4px', marginTop: '10%', theme: 'twoTone'}"
+                                                    @click="likeit(movie.id)" />
+                                                <span :id="'like_count' + movie.id">{{ movie.like_count }}</span>
+                                            </span>
 
-                                    </a-row>
+                                        </a-row>
 
-                                </template>
-                            </a-list-item>
-                        </a-list>
-                    </a-col>
+                                    </template>
+                                </a-list-item>
+                            </a-list>
+                        </a-col>
+                    </div>
+
+                    <div v-else-if="selectedTag=='messages'">
+                        <a-col :span="12">
+                            <div style="background-color: #fff;">
+                                <a-tabs defaultActiveKey="unread" style="height:100%; margin-bottom: 2%;">
+                                    <a-tab-pane tab="未读" key="unread" style="width: 100%; overflow: visible">
+                                        <MessageUnreadTable />
+                                    </a-tab-pane>
+                                    <a-tab-pane tab="收件箱" key="recv" style="width: 100%; overflow: visible">
+                                        <MessageRecvTable />
+                                    </a-tab-pane>
+                                    <a-tab-pane tab="发件箱" key="sent" style="width: 100%; overflow: visible">
+                                        <MessageSentTable />
+                                    </a-tab-pane>
+                                    <a-tab-pane tab="发消息" key="sendMessage" style="width: 100%; overflow: visible">
+                                        <SendMessageTable />
+                                    </a-tab-pane>
+
+                                </a-tabs>
+                            </div>
+                        </a-col>
+                    </div>
+
                 </a-row>
 
                 <!-- 用户信息drawer -->
@@ -214,6 +227,11 @@
 <script>
     import axios from 'axios'
 
+    import MessageRecvTable from './tables/MessageRecvTable.vue'
+    import MessageSentTable from './tables/MessageSentTable.vue'
+    import MessageUnreadTable from './tables/MessageUnreadTable.vue'
+    import SendMessageTable from './tables/SendMessageTable.vue'
+
     function getBase64(img, callback) {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
@@ -222,11 +240,19 @@
 
     export default {
         name: 'Index',
+        components: {
+            MessageRecvTable,
+            MessageSentTable,
+            MessageUnreadTable,
+            SendMessageTable,
+        },
         data() {
             return {
                 current_user: '',
                 movie_list: '',
+                compilation_list: '',
                 categories: '',
+                selectedTag: 'movies',
                 userDrawerVisible: false, // 用户信息drawer展示
                 updateUserForm: this.$form.createForm(this, { name: 'coordinated' }),
                 imageAvatar: '',
@@ -237,12 +263,13 @@
         mounted() {
             this.getCurrentUser()
             this.getMovies()
+            this.getCompilations()
             this.getMovieTypes()
         },
         methods: {
 
             getCurrentUser() {
-                var url = this.host + "/users?username=" + sessionStorage.username
+                var url = this.host + "/users/query?username=" + sessionStorage.username
                 axios.get(url)
                     .then(response => {
                         this.current_user = response.data[0]
@@ -251,11 +278,37 @@
                     })
 
             },
+            onSearch(value) {
+                if (value == "") {
+                    this.getMovies()
+                }
+                var url = this.host + "/movies/query?name=" + value
+                axios.get(url)
+                    .then(response => {
+                        this.movie_list = response.data
+                    })
+            },
+            selectTag(tagName) {
+                this.selectedTag = tagName
+            },
+            searchMovie() {
+                var a = document.getElementById('movie-searcher').innerHTML
+                var b = document.getElementById('movie-searcher').innerText
+                alert(a)
+                alert(b)
+            },
             getMovies() {
                 var url = this.host + "/movies"
                 axios.get(url)
                     .then(response => {
                         this.movie_list = response.data
+                    })
+            },
+            getCompilations() {
+                var url = this.host + "/movies/comp"
+                axios.get(url)
+                    .then(response => {
+                        this.compilation_list = response.data
                     })
             },
             getMovieTypes() {

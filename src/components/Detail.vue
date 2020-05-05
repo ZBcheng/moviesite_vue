@@ -27,31 +27,40 @@
         </header>
 
         <div style="height: 80%;">
-            <a-card hoverable style="width: 70%; height: 100%; margin-left: 15%; margin-top: 3%; text-align: left;">
+            <a-card hoverable style="width: 70%; margin-left: 15%; margin-top: 3%; text-align: left;">
                 <a-row>
-                    <a-col :span="8">
-                        <div style="float:left">
-                            <img slot="cover" alt="example" :src="movie.post" />
-                        </div>
-                    </a-col>
-                    <a-col :span="16" style="float: left; text-align: left;">
-                        <h1>{{ movie.name }}</h1>
-                        <h4>导演: {{ this.directors }}</h4>
-                        <h4>演员: {{ this.actors }}</h4>
-                        <h4>分类: {{ this.categories }}</h4>
-                        <h4>地区: {{ movie.area }}</h4>
-                        <h4>语言: {{ movie.language }}</h4>
-                        <h4>片长: {{ movie.length }} 分钟</h4>
-                        <h4>上映时间: {{ movie.release_date }}</h4>
-                        <a-button type="primary" icon="caret-right" :size="large" style="margin-top: 5%">
-                            播放
-                        </a-button>
-                    </a-col>
-                </a-row>
-                <a-row style="margin-top: 5%">
-                    <p style="font-size:16px; line-height: 1.8;">
-                        {{ movie.desc }}
-                    </p>
+                    <a-row>
+                        <a-col :span="8">
+                            <div style="float:left">
+                                <img slot="cover" alt="example" :src="movie.post" />
+                            </div>
+                        </a-col>
+                        <a-col :span="16" style="float: left; text-align: left;">
+                            <h1>{{ movie.name }}</h1>
+                            <h4>导演: {{ this.directors }}</h4>
+                            <h4>演员: {{ this.actors }}</h4>
+                            <h4>分类: {{ this.categories }}</h4>
+                            <h4>地区: {{ movie.area }}</h4>
+                            <h4>语言: {{ movie.language }}</h4>
+                            <h4>片长: {{ movie.length }} 分钟</h4>
+                            <h4>上映时间: {{ movie.release_date }}</h4>
+                            <div style="margin-top:2%">
+                                <a :href="movie.link_addr" style="font-size: 16px;">链接: IMDB</a>
+                            </div>
+
+
+                            <a-button type="primary" icon="caret-right" :size="large" style="margin-top: 5%"
+                                @click="watchMovie">
+                                播放
+                            </a-button>
+                        </a-col>
+                    </a-row>
+                    <a-row style="margin-top: 3%;">
+                        <p style="font-size:16px; line-height: 1.7;">
+                            {{ movie.desc }}
+                        </p>
+                    </a-row>
+
                 </a-row>
             </a-card>
         </div>
@@ -102,7 +111,7 @@
                 }
             },
             getUser() {
-                var url = this.host + "/users?username=" + sessionStorage.username
+                var url = this.host + "/users/query?username=" + sessionStorage.username
                 axios.get(url)
                     .then(response => {
                         this.current_user = response.data[0]
@@ -111,6 +120,9 @@
             },
             back2Index() {
                 this.$router.push('/home')
+            },
+            watchMovie() {
+                this.$router.push({ path: "/movie", query: { url: this.movie.video, user: this.current_user } })
             }
         }
 
