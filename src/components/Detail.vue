@@ -48,8 +48,23 @@
                                 <a :href="movie.link_addr" style="font-size: 16px;">链接: IMDB</a>
                             </div>
 
+                            <div v-if="stored==false">
+                                <a-button type="primary" icon="eye" :size="large" style="margin-top: 2%"
+                                    @click="storeUp(movie.id, 0)">
+                                    收藏
+                                </a-button>
+                            </div>
 
-                            <a-button type="primary" icon="caret-right" :size="large" style="margin-top: 5%"
+                            <div v-else-if="stored==true">
+                                <a-button type="primary" icon="eye-invisible" :size="large" style="margin-top: 2%"
+                                    @click="storeUp(movie.id, 1)">
+                                    取消收藏
+                                </a-button>
+                            </div>
+
+
+
+                            <a-button type="primary" icon="caret-right" :size="large" style="margin-top: 2%"
                                 @click="watchMovie">
                                 播放
                             </a-button>
@@ -79,6 +94,7 @@
                 directors: "",
                 actors: "",
                 categories: "",
+                stored: false,
                 host: "http://127.0.0.1:8000"
             }
         },
@@ -89,6 +105,7 @@
             this.createActorsStr()
             this.createCategoriesStr()
             this.getUser()
+            this.isStored()
         },
 
         methods: {
@@ -123,6 +140,37 @@
             },
             watchMovie() {
                 this.$router.push({ path: "/movie", query: { url: this.movie.video, user: this.current_user } })
+            },
+            isStored() {
+                var url = this.host + "/users/stored?username=" + sessionStorage.username + "&movie_id=" + this.movie.id
+                axios.get(url)
+                    .then(response => {
+                        if (response.data.length > 0) {
+                            this.stored = true
+                        }
+                    })
+            },
+            storeUp(movie_id, op) {
+
+                var url = this.host + "/users/store"
+                var headers = {
+                    "Access-Control-Allow-Credentials": true,
+                    "Access-Control-Allow-Origin": "*",
+                    "Access-Control-Allow-Methods": "PUT",
+                    "Access-Control-Allow-Headers": "Content-Type",
+                }
+
+                axios.put(url, {
+                    headers: headers,
+                    data: {
+                        "usre_name": sessionStorage.username,
+                        "movie_id": movie_id,
+                        "op": op,
+                    },
+                })
+                    .then(response => {
+                        console.log(response.data)
+                    })
             }
         }
 

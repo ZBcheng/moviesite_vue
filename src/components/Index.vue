@@ -74,11 +74,14 @@
                                 <a-menu-item key="messages" @click="selectTag('messages')">信箱</a-menu-item>
                             </a-menu-item-group>
 
+
                             <a-menu-item-group v-if="selectedTag=='movies'">
                                 <template slot="title">
                                     <span style="color: #1890FF">分类</span>
                                 </template>
                                 <a-menu-item key="all" @click="getMovies()">全部
+                                </a-menu-item>
+                                <a-menu-item key="stored" @click="getStored()">收藏
                                 </a-menu-item>
                                 <a-menu-item v-for="category in categories" :key="category.id"
                                     @click="getMovieByType(category.name)">
@@ -299,6 +302,13 @@
             },
             getMovies() {
                 var url = this.host + "/movies"
+                axios.get(url)
+                    .then(response => {
+                        this.movie_list = response.data
+                    })
+            },
+            getStored() {
+                var url = this.host + "/users/stored?username=" + sessionStorage.username
                 axios.get(url)
                     .then(response => {
                         this.movie_list = response.data
