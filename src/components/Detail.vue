@@ -40,10 +40,10 @@
                             <h4>导演: {{ this.directors }}</h4>
                             <h4>演员: {{ this.actors }}</h4>
                             <h4>分类: {{ this.categories }}</h4>
-                            <h4>地区: {{ movie.area }}</h4>
-                            <h4>语言: {{ movie.language }}</h4>
-                            <h4>片长: {{ movie.length }} 分钟</h4>
-                            <h4>上映时间: {{ movie.release_date }}</h4>
+                            <h4>地区: {{ this.movie.area }}</h4>
+                            <h4>语言: {{ this.movie.language }}</h4>
+                            <h4>片长: {{ this.movie.length }} 分钟</h4>
+                            <h4>上映时间: {{ this.movie.release_date }}</h4>
                             <div style="margin-top:2%">
                                 <a :href="movie.link_addr" style="font-size: 16px;">链接: IMDB</a>
                             </div>
@@ -89,7 +89,7 @@
     export default {
         data() {
             return {
-                movie: this.$route.query.movie,
+                movie: "",
                 current_user: "",
                 directors: "",
                 actors: "",
@@ -101,30 +101,38 @@
 
         mounted() {
             console.log(this.movie)
-            this.createDirectorsStr()
-            this.createActorsStr()
-            this.createCategoriesStr()
+            this.getMovie()
             this.getUser()
-            this.isStored()
         },
 
         methods: {
+            getMovie() {
+                var url = this.host + "/movies/query?movie_id=" + this.$route.query.id
+                axios.get(url)
+                    .then(response => {
+                        this.movie = response.data[0]
+                        this.createDirectorsStr()
+                        this.createActorsStr()
+                        this.createCategoriesStr()
+                        this.isStored()
+                    })
+            },
             createDirectorsStr() {
                 var i
-                for (i = 0; i < this.$route.query.movie.directors.length; i++) {
-                    this.directors += this.$route.query.movie.directors[i] + " "
+                for (i = 0; i < this.movie.directors.length; i++) {
+                    this.directors += this.movie.directors[i] + " "
                 }
             },
             createActorsStr() {
                 var i
-                for (i = 0; i < this.$route.query.movie.actors.length; i++) {
-                    this.actors += this.$route.query.movie.actors[i] + " "
+                for (i = 0; i < this.movie.actors.length; i++) {
+                    this.actors += this.movie.actors[i] + " "
                 }
             },
             createCategoriesStr() {
                 var i
-                for (i = 0; i < this.$route.query.movie.category.length; i++) {
-                    this.categories += this.$route.query.movie.category[i] + " "
+                for (i = 0; i < this.movie.category.length; i++) {
+                    this.categories += this.movie.category[i] + " "
                 }
             },
             getUser() {
@@ -145,8 +153,11 @@
                 var url = this.host + "/users/stored?username=" + sessionStorage.username + "&movie_id=" + this.movie.id
                 axios.get(url)
                     .then(response => {
-                        if (response.data.length > 0) {
-                            this.stored = true
+                        var i
+                        for (i = 0; i < response.data.length; i++) {
+                            if (response.data[i].id == this.movie.id) {
+                                this.stored = true
+                            }
                         }
                     })
             },
@@ -170,6 +181,7 @@
                 })
                     .then(response => {
                         console.log(response.data)
+                        location.reload()
                     })
             }
         }

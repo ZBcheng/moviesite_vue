@@ -101,7 +101,7 @@
                                     <img :src="movie.post" slot="extra" width="150" height="200" />
                                     <a-list-item-meta :description="item">
                                         <a slot="title" style="float:left; font-size: large;"
-                                            @click="viewMovie(movie)">{{ movie.name }}</a>
+                                            @click="viewMovie(movie.id)">{{ movie.name }}</a>
                                     </a-list-item-meta>
                                     <p style="float:left; overflow: hidden;
                                 display: -webkit-box; -webkit-line-clamp: 5;
@@ -294,12 +294,7 @@
             selectTag(tagName) {
                 this.selectedTag = tagName
             },
-            searchMovie() {
-                var a = document.getElementById('movie-searcher').innerHTML
-                var b = document.getElementById('movie-searcher').innerText
-                alert(a)
-                alert(b)
-            },
+
             getMovies() {
                 var url = this.host + "/movies"
                 axios.get(url)
@@ -335,8 +330,8 @@
                         this.movie_list = response.data
                     })
             },
-            viewMovie(movie) {
-                this.$router.push({ path: "/view", query: { movie: movie } })
+            viewMovie(movieID) {
+                this.$router.push({ path: "/view", query: { id: movieID } })
             },
             viewMail() {
                 this.$router.push("/message")
