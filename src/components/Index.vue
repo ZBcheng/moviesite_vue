@@ -5,7 +5,7 @@
                 style="width: 100%; background: white; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.1);">
                 <a-row>
                     <div style="width: 20%;float: left;margin-left:13%;padding-top:1%;">
-                        <img src="../assets/images/brand.svg" style="width: 60%;" /> </div>
+                        <img src="../assets/images/brand.png" style="width: 60%;" /> </div>
                     <div style="width: 30%; float: left; padding-top:1%; margin-left:0.5%">
                         <template>
                             <div class="certain-category-search-wrapper" style="width: 100%;">
@@ -260,7 +260,7 @@
                 updateUserForm: this.$form.createForm(this, { name: 'coordinated' }),
                 imageAvatar: '',
                 imageUrl: '',
-                host: 'http://127.0.0.1:8000',
+                host: '/api/',
             };
         },
         mounted() {
@@ -269,7 +269,41 @@
             this.getCompilations()
             this.getMovieTypes()
         },
+        created() {
+            this.initWebSocket()
+        },
         methods: {
+            initWebSocket() {
+                //初始化weosocket
+                const url = "ws://localhost:7000/noti"
+                this.websock = new WebSocket(url)
+                this.websock.onmessage = this.websocketonmessage
+                this.websock.onopen = this.websocketonopen
+                this.websock.onclose = this.websocketonclose
+                console.log(this.websock)
+            },
+            websocketonopen() {
+                //连接建立之后执行send方法发送数据
+                // operation: 0 建立连接
+                // operation: 1 断开连接
+                this.websocketsend(JSON.stringify({ "username": sessionStorage.username, "operation": 0 }))
+            },
+            websocketonmessage(e) {
+                //数据接收
+                const redata = e.data
+                var title = "来自bot的消息"
+                this.openNotificationWithIcon("info", title, redata)
+            },
+            websocketsend(Data) {
+                //数据发送
+                this.websock.send(Data)
+            },
+            websocketonclose() {
+                this.websocketsend(JSON.stringify({ "username": sessionStorage.username, "operation": 1 }))
+                if (this.websocket != null) {
+                    this.websocket.close()
+                }
+            },
 
             getCurrentUser() {
                 var url = this.host + "/users/query?username=" + sessionStorage.username

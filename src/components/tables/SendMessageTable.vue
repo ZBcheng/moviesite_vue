@@ -81,7 +81,7 @@
                 value: "",
                 selected_user,
                 selected_vuln: [],
-                host: "http://127.0.0.1:8000/",
+                host: "api/",
                 message_title: "",
                 message_content: "",
             }

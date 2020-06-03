@@ -3,7 +3,7 @@
         <header class="header" style="width: 100%; background: white; box-shadow: 0 3px 7px rgba(117, 115, 115, 0.1);">
             <a-row>
                 <div style="width: 20%;float: left;margin-left:13%;padding-top:1%;" @click="back2Index">
-                    <img src="../assets/images/brand.svg" style="width: 60%;" /> </div>
+                    <img src="../assets/images/brand.png" style="width: 60%;" /> </div>
                 <a-menu theme="light" mode="horizontal" :defaultSelectedKeys="['1']"
                     style="line-height: 63px; width: 20%; text-align: right; float: right; margin-right: 15%">
                     <!-- <a>hello</a> -->

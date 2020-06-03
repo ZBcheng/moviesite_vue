@@ -66,7 +66,7 @@
             return {
                 username: '',
                 password: '',
-                host: 'http://127.0.0.1:8000/',
+                host: '/api/',
                 visible: false,
             }
         },

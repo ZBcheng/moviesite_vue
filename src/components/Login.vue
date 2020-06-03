@@ -26,9 +26,6 @@
                         </a-form-item>
                         <a-form-item>
 
-                            <a class="login-form-forgot" href="">
-                                忘记密码
-                            </a>
                             <a-button type="primary" html-type="submit" class="login-form-button">
                                 登录
                             </a-button>
@@ -59,7 +56,7 @@
                 username: '',
                 password: '',
                 infoContent: '',
-                host: 'http://127.0.0.1:8000/',
+                host: '/api/',
                 visible: false,
             }
         },
